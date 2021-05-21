@@ -1,0 +1,29 @@
+<?php
+/**
+ * @var string      $content
+ * @var string      $msgType
+ * @var string      $closeBtnLabel
+ * @var string|null $closeBtnClass
+ * @var string      $modalPadding
+ * @var string      $popupId
+ * @var bool        $inset
+ *
+ * @see \GromIT\PopupBuilder\Behaviors\PopupController::renderMsgPopup
+ */
+?>
+<?php if (!$inset): ?>
+    <div id="<?= $popupId ?>">
+<?php endif ?>
+    <div class="modal-body <?= $modalPadding ?>">
+        <p class="flash-message static <?= $msgType ?>"><?= $content ?></p>
+    </div>
+    <div class="modal-footer">
+        <button type="button"
+                data-dismiss="popup"
+                class="<?= $closeBtnClass ?>">
+            <?= $closeBtnLabel ?>
+        </button>
+    </div>
+<?php if (!$inset): ?>
+    </div>
+<?php endif ?>

@@ -1,0 +1,60 @@
+<?php
+
+use October\Rain\Support\Facades\Form;
+
+/**
+ * @var string|null           $title
+ * @var string|null           $content
+ * @var string|null           $contentBelow
+ * @var string                $actionBtnLabel
+ * @var string|null           $actionBtnClass
+ * @var string                $closeBtnLabel
+ * @var string|null           $closeBtnClass
+ * @var string                $popupId
+ * @var bool                  $loadIndicator
+ * @var string|null           $confirm
+ * @var string|null           $successCallback
+ * @var string                $actionOnClick
+ * @var string                $modalPadding
+ * @var bool                  $inset
+ * @var \Backend\Widgets\Form $form
+ *
+ * @see \GromIT\PopupBuilder\Behaviors\PopupController::renderFormPopup
+ */
+?>
+<?php if (!$inset): ?>
+<div id="<?= $popupId ?>">
+    <?php endif ?>
+    <?= Form::open() ?>
+    <?php if ($title): ?>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="popup">×</button>
+            <h4 class="modal-title"><?= $title ?></h4>
+        </div>
+    <?php endif ?>
+    <div class="modal-body <?= $modalPadding ?>">
+        <?= $content ?>
+        <?= Form::sessionKey() ?>
+        <?= $form->render() ?>
+        <?= $contentBelow ?>
+    </div>
+    <div class="modal-footer">
+        <div class="loading-indicator-container">
+            <button data-load-indicator="&nbsp;"
+                    data-request="<?= $actionOnClick ?>"
+                    data-request-validate
+                    <?= $successCallback ? 'data-request-success="' . $successCallback . '"' : '' ?>
+                    <?= $loadIndicator ? 'data-popup-load-indicator="1"' : '' ?>
+                    <?= $confirm ? 'data-request-confirm="' . $confirm . '"' : '' ?>
+                    type="submit" class="<?= $actionBtnClass ?>">
+                <?= $actionBtnLabel ?>
+            </button>
+            <button type="button" class="<?= $closeBtnClass ?>" data-dismiss="popup">
+                <?= $closeBtnLabel ?>
+            </button>
+        </div>
+    </div>
+    <?= Form::close() ?>
+    <?php if (!$inset): ?>
+</div>
+<?php endif ?>

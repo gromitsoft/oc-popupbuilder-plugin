@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var string $openBtnClass
+ * @var string $openBtnLabel
+ * @var string $popupDefinition
+ * @var string $popupSize
+ *
+ * @see \GromIT\PopupBuilder\Behaviors\PopupController::popupRenderOpenBtn
+ */
+?>
+<button class="<?= $openBtnClass ?>"
+        data-control="popup"
+        data-handler="onOpenPopup"
+        data-size="<?= $popupSize ?>"
+        data-request-data="popupDefinition: '<?= $popupDefinition ?>'">
+    <?= $openBtnLabel ?>
+</button>
