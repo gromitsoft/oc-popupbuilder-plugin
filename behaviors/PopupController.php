@@ -237,9 +237,14 @@ class PopupController extends ControllerBehavior
     {
         $content = $this->controller->getPopupContent($definition);
 
-        $params            = $this->getMainParams($definition, $popupConfig);
-        $params['title']   = $popupConfig->title ?? null;
+        $params = $this->getMainParams($definition, $popupConfig);
         $params['content'] = $content;
+
+        if ($this->controller->methodExists('getPopupTitle')) {
+            $params['title'] = $this->controller->getPopupTitle($definition);
+        } else {
+            $params['title'] = $this->getPopupTitle($definition);
+        }
 
         return $this->popupMakePartial('content_popup', $params);
     }
@@ -261,7 +266,6 @@ class PopupController extends ControllerBehavior
         $contentBelow = $this->controller->getPopupContent($definition, true);
 
         $params                    = $this->getMainParams($definition, $popupConfig);
-        $params['title']           = $popupConfig->title ?? null;
         $params['content']         = $content;
         $params['contentBelow']    = $contentBelow;
         $params['actionBtnLabel']  = $popupConfig->actionBtnLabel ?? 'OK';
@@ -271,6 +275,12 @@ class PopupController extends ControllerBehavior
         $params['actionOnClick']   = $popupConfig->actionOnClick;
         $params['form']            = $this->controller->widget->{$this->makePopupFormAlias($definition)};
         $params['successCallback'] = $popupConfig->successCallback ?? null;
+
+        if ($this->controller->methodExists('getPopupTitle')) {
+            $params['title'] = $this->controller->getPopupTitle($definition);
+        } else {
+            $params['title'] = $this->getPopupTitle($definition);
+        }
 
         return $this->popupMakePartial('form_popup', $params);
     }
@@ -355,10 +365,23 @@ class PopupController extends ControllerBehavior
     }
 
     /**
+     * @param string $definition
+     *
+     * @return string
+     */
+    public function getPopupTitle(string $definition): ?string
+    {
+        $popupConfig = $this->popupDefinitions[$definition];
+
+        return $popupConfig->title ?? null;
+    }
+
+    /**
      * @param string    $definition
      * @param bool|null $below Only for forms
      *
      * @return string|null
+     * @throws \SystemException
      */
     public function getPopupContent(string $definition, ?bool $below = false): ?string
     {

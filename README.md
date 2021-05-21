@@ -117,7 +117,7 @@ Config for form popup must contain **actionOnClick** and **form** options.
 
 ## Overrides
 
-There are two methods for the override.
+There are methods for the override.
 
 ```php
 public function getPopupFormModel(string $definition, ?string $modelClass): \October\Rain\Database\Model
@@ -131,7 +131,13 @@ public function getPopupContent(string $definition, ?bool $below = false): ?stri
 }
 ```
 
-You can use it for override content of popups and form model of **form** popups.
+```php
+public function getPopupTitle(string $definition): ?string
+{
+}
+```
+
+You can use it for override title and content of popups and form model of **form** popups.
 
 Below param of **getPopupContent()** is for overriding the **contentBelow**. 
 
