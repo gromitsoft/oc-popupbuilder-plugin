@@ -109,7 +109,8 @@ Option                  | Description | Default value
 **actionOnClick**       | Action on form submit button. | &nbsp;
 **loadIndicator**       | Show loading popup on performing actionOnClick action? | false
 **confirm**             | Confirm message for form submit button. | null
-**successCallback**     | Javascript callback for execute after success. | null
+**closeOnSuccess**      | Close popup on success. | false
+**successCallback**     | Javascript callback for execute after success. Overrides **closeOnSuccess**. | null
 **form**                | Form config. Must contain fields config. | &nbsp;
 **modelClass**          | Model class for form. | \October\Rain\Database\Model
 

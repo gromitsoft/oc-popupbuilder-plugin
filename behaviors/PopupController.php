@@ -237,7 +237,7 @@ class PopupController extends ControllerBehavior
     {
         $content = $this->controller->getPopupContent($definition);
 
-        $params = $this->getMainParams($definition, $popupConfig);
+        $params            = $this->getMainParams($definition, $popupConfig);
         $params['content'] = $content;
 
         if ($this->controller->methodExists('getPopupTitle')) {
@@ -265,16 +265,25 @@ class PopupController extends ControllerBehavior
         $content      = $this->controller->getPopupContent($definition);
         $contentBelow = $this->controller->getPopupContent($definition, true);
 
-        $params                    = $this->getMainParams($definition, $popupConfig);
-        $params['content']         = $content;
-        $params['contentBelow']    = $contentBelow;
-        $params['actionBtnLabel']  = $popupConfig->actionBtnLabel ?? 'OK';
-        $params['actionBtnClass']  = $popupConfig->actionBtnClass ?? 'btn btn-primary';
-        $params['loadIndicator']   = $popupConfig->loadIndicator ?? false;
-        $params['confirm']         = $popupConfig->confirm ?? null;
-        $params['actionOnClick']   = $popupConfig->actionOnClick;
-        $params['form']            = $this->controller->widget->{$this->makePopupFormAlias($definition)};
-        $params['successCallback'] = $popupConfig->successCallback ?? null;
+        $params                   = $this->getMainParams($definition, $popupConfig);
+        $params['content']        = $content;
+        $params['contentBelow']   = $contentBelow;
+        $params['actionBtnLabel'] = $popupConfig->actionBtnLabel ?? 'OK';
+        $params['actionBtnClass'] = $popupConfig->actionBtnClass ?? 'btn btn-primary';
+        $params['loadIndicator']  = $popupConfig->loadIndicator ?? false;
+        $params['confirm']        = $popupConfig->confirm ?? null;
+        $params['actionOnClick']  = $popupConfig->actionOnClick;
+        $params['form']           = $this->controller->widget->{$this->makePopupFormAlias($definition)};
+
+        $successCallback = $popupConfig->successCallback ?? null;
+
+        if ($successCallback) {
+            $params['successCallback'] = $successCallback;
+        } elseif ($popupConfig->closeOnSuccess ?? false) {
+            $params['successCallback'] = "$('.control-popup').last().popup('hide');";
+        } else {
+            $params['successCallback'] = null;
+        }
 
         if ($this->controller->methodExists('getPopupTitle')) {
             $params['title'] = $this->controller->getPopupTitle($definition);
