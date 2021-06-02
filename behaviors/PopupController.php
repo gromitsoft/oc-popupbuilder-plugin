@@ -127,9 +127,9 @@ class PopupController extends ControllerBehavior
             $model = $this->getPopupFormModel($definition, $popupConfig->modelClass ?? null);
         }
 
-        $formConfig          = $popupConfig->form;
-        $formConfig['model'] = $model;
-        $formConfig['alias'] = $popupConfig->formAlias ?? $this->makePopupFormAlias($definition);
+        $formConfig        = $this->makeConfig($popupConfig->form);
+        $formConfig->model = $model;
+        $formConfig->alias = $popupConfig->formAlias ?? $this->makePopupFormAlias($definition);
 
         $this
             ->controller
