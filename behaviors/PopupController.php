@@ -42,7 +42,7 @@ class PopupController extends ControllerBehavior
      *
      * @param $controller
      *
-     * @throws \October\Rain\Exception\SystemException
+     * @throws \October\Rain\Exception\SystemException|\October\Rain\Exception\ApplicationException
      */
     public function __construct($controller)
     {
@@ -103,6 +103,9 @@ class PopupController extends ControllerBehavior
         }
     }
 
+    /**
+     * @throws \SystemException
+     */
     protected function bindForms(): void
     {
         foreach ($this->popupDefinitions as $definition => $config) {
@@ -159,11 +162,12 @@ class PopupController extends ControllerBehavior
      * Render open popup button.
      *
      * @param string|null $definition
+     * @param array       $extraRequestData
      *
      * @return string
      * @throws \October\Rain\Exception\SystemException
      */
-    public function popupRenderOpenBtn(?string $definition = null): string
+    public function popupRenderOpenBtn(?string $definition = null, array $extraRequestData = []): string
     {
         if ($definition === null) {
             $definition = $this->primaryDefinition;
@@ -181,11 +185,22 @@ class PopupController extends ControllerBehavior
             $btnClass = 'btn btn-default';
         }
 
+        $dataStrings = array_map(function ($val, $key) {
+            return "$key: '$val'";
+        }, $extraRequestData, array_keys($extraRequestData));
+
+        if (!empty($dataStrings)) {
+            $extraDataAttribute = ', ' . implode(', ', $dataStrings);
+        } else {
+            $extraDataAttribute = '';
+        }
+
         return $this->popupMakePartial('btn', [
             'openBtnClass'    => $btnClass,
             'openBtnLabel'    => $popupConfig->openBtnLabel,
             'popupDefinition' => $definition,
-            'popupSize'       => $popupConfig->popupSize ?? 'medium'
+            'popupSize'       => $popupConfig->popupSize ?? 'medium',
+            'extraData'       => $extraDataAttribute,
         ]);
     }
 
@@ -233,6 +248,9 @@ class PopupController extends ControllerBehavior
         }
     }
 
+    /**
+     * @throws \October\Rain\Exception\SystemException
+     */
     protected function renderContentPopup(string $definition, $popupConfig): string
     {
         $content = $this->controller->getPopupContent($definition);
@@ -249,6 +267,9 @@ class PopupController extends ControllerBehavior
         return $this->popupMakePartial('content_popup', $params);
     }
 
+    /**
+     * @throws \October\Rain\Exception\SystemException
+     */
     protected function renderMsgPopup(string $definition, $popupConfig): string
     {
         $content = $this->controller->getPopupContent($definition);
@@ -260,6 +281,9 @@ class PopupController extends ControllerBehavior
         return $this->popupMakePartial('msg_popup', $params);
     }
 
+    /**
+     * @throws \October\Rain\Exception\SystemException
+     */
     protected function renderFormPopup(string $definition, $popupConfig): string
     {
         $content      = $this->controller->getPopupContent($definition);
@@ -305,6 +329,7 @@ class PopupController extends ControllerBehavior
      * @param array  $params
      *
      * @return string Partial contents
+     * @throws \October\Rain\Exception\SystemException
      */
     public function popupMakePartial(string $partial, array $params = []): string
     {
@@ -391,6 +416,7 @@ class PopupController extends ControllerBehavior
      *
      * @return string|null
      * @throws \SystemException
+     * @noinspection PhpUnused
      */
     public function getPopupContent(string $definition, ?bool $below = false): ?string
     {

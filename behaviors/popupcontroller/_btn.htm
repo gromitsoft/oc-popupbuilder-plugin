@@ -4,6 +4,7 @@
  * @var string $openBtnLabel
  * @var string $popupDefinition
  * @var string $popupSize
+ * @var string $extraData
  *
  * @see \GromIT\PopupBuilder\Behaviors\PopupController::popupRenderOpenBtn
  */
@@ -12,6 +13,7 @@
         data-control="popup"
         data-handler="onOpenPopup"
         data-size="<?= $popupSize ?>"
-        data-request-data="popupDefinition: '<?= $popupDefinition ?>'">
+        data-request-data="popupDefinition: '<?= $popupDefinition ?>'<?= $extraData ?>"
+>
     <?= $openBtnLabel ?>
 </button>

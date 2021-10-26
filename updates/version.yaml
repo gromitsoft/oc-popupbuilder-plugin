@@ -3,3 +3,4 @@
 1.0.3: Method for override popup title
 1.0.4: Close form popup on success option
 1.0.5: Ability to define popup form config in separate file
+1.0.6: Ability to add extra request data to open popup button

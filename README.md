@@ -28,10 +28,15 @@ public $popupConfig = [
 ]; 
 ```
 
-For render open popup button call ```popupRenderOpenBtn()``` method from controller with definition as optional parameter.  
+For render open popup button call ```popupRenderOpenBtn()``` method from controller.
+
+```popupRenderOpenBtn()``` receives two optional parameters. First is a definition of popup, second is extra data for ```request-data``` attribute.
 
 ```php
-<?= $this->popupRenderOpenBtn('popup1') ?>
+<?= $this->popupRenderOpenBtn('popup1', [
+    'modelId'   => 1,
+    'paramName' => 'paramValue',
+]) ?>
 ```
 
 Or you can write html by yourself.
@@ -41,7 +46,7 @@ Or you can write html by yourself.
         data-control="popup"
         data-handler="onOpenPopup"
         data-size="medium"
-        data-request-data="popupDefinition: 'popup1'">
+        data-request-data="popupDefinition: 'popup1', modelId: '1', paramName: 'paramValue'">
     Open popup
 </button>
 ```
@@ -62,15 +67,17 @@ Form popup is popup with custom form.
 
 Common options for popups of all types:
 
-Option           | Description | Default value
------------------|-------------|---------------
-**type**         | Popup type. Possible values: ```content```, ```form``` or ```msg```. | &nbsp;
-**openBtnLabel** | Open popup button label. | &nbsp;
-**openBtnClass** | Open popup button css class. | btn btn-default
-**popupSize**    | Size of popup. Available sizes: ```giant```, ```huge```, ```large```, ```medium```, ```small```, ```tiny```. | medium
-**noPadding**    | Remove padding from popup body. | &nbsp;
-**popupId**      | Popup Id attribute. | definition name 
-**inset**        | Do not wrap popup in div with id. | false 
+Option            | Description | Default value
+------------------|-------------|---------------
+**type**          | Popup type. Possible values: ```content```, ```form``` or ```msg```. | &nbsp;
+**openBtnLabel**  | Open popup button label. | &nbsp;
+**openBtnClass**  | Open popup button css class. | btn btn-default
+**closeBtnLabel** | Close popup button label. | &nbsp;
+**closeBtnClass** | Close popup button css class. | btn btn-default
+**popupSize**     | Size of popup. Available sizes: ```giant```, ```huge```, ```large```, ```medium```, ```small```, ```tiny```. | medium
+**noPadding**     | Remove padding from popup body. | &nbsp;
+**popupId**       | Popup Id attribute. | definition name 
+**inset**         | Do not wrap popup in div with id. | false 
 
 **type** is required for every popup config.
 
