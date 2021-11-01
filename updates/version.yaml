@@ -4,3 +4,4 @@
 1.0.4: Close form popup on success option
 1.0.5: Ability to define popup form config in separate file
 1.0.6: Ability to add extra request data to open popup button
+1.0.7: Ability to define multiple action buttons in form popup

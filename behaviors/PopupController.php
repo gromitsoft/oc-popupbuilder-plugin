@@ -23,7 +23,7 @@ class PopupController extends ControllerBehavior
 
     protected $requiredPopupContentConfig = [];
 
-    protected $requiredPopupFormConfig = ['actionOnClick', 'form'];
+    protected $requiredPopupFormConfig = ['form'];
 
     protected $requiredPopupMsgConfig = ['content', 'msgType'];
 
@@ -81,7 +81,9 @@ class PopupController extends ControllerBehavior
                 case self::TYPE_CONTENT:
                     $requiredConfig = $this->requiredPopupContentConfig;
 
-                    if (!($popupConfig->contentPartial ?? $popupConfig->content ?? null)) {
+                    $content = $popupConfig->contentPartial ?? $popupConfig->content ?? null;
+
+                    if (!$content) {
                         throw new SystemException(Lang::get(
                             'gromit.popupbuilder::lang.config.content_or_content_partial',
                             ['definition' => $definition]
@@ -154,6 +156,27 @@ class PopupController extends ControllerBehavior
                     'system::lang.config.required',
                     ['property' => $property, 'location' => static::class]
                 ));
+            }
+        }
+
+        if ($config->type === self::TYPE_FORM) {
+            if (!property_exists($config, 'actionOnClick') && !property_exists($config, 'buttons')) {
+                throw new SystemException('Config for form popup must contain "buttons" or "actionOnClick" property');
+            }
+
+            if ($config->buttons ?? null) {
+                if (!is_array($config->buttons)) {
+                    throw new SystemException('Property "buttons" in ' . static::class . ' must be array');
+                }
+
+                foreach ($config->buttons as $btnConfig) {
+                    if (empty($btnConfig['onClick'])) {
+                        throw new SystemException(Lang::get(
+                            'system::lang.config.required',
+                            ['property' => 'buttons.*.onClick', 'location' => static::class]
+                        ));
+                    }
+                }
             }
         }
     }
@@ -289,24 +312,49 @@ class PopupController extends ControllerBehavior
         $content      = $this->controller->getPopupContent($definition);
         $contentBelow = $this->controller->getPopupContent($definition, true);
 
-        $params                   = $this->getMainParams($definition, $popupConfig);
-        $params['content']        = $content;
-        $params['contentBelow']   = $contentBelow;
-        $params['actionBtnLabel'] = $popupConfig->actionBtnLabel ?? 'OK';
-        $params['actionBtnClass'] = $popupConfig->actionBtnClass ?? 'btn btn-primary';
-        $params['loadIndicator']  = $popupConfig->loadIndicator ?? false;
-        $params['confirm']        = $popupConfig->confirm ?? null;
-        $params['actionOnClick']  = $popupConfig->actionOnClick;
-        $params['form']           = $this->controller->widget->{$this->makePopupFormAlias($definition)};
+        $params                 = $this->getMainParams($definition, $popupConfig);
+        $params['content']      = $content;
+        $params['contentBelow'] = $contentBelow;
+        $params['form']         = $this->controller->widget->{$this->makePopupFormAlias($definition)};
 
-        $successCallback = $popupConfig->successCallback ?? null;
+        if (isset($popupConfig->buttons) && is_array($popupConfig->buttons)) {
+            $params['buttons'] = collect($popupConfig->buttons)->map(function ($btnConfig) {
+                if ($btnConfig['successCallback'] ?? null) {
+                    $successCallback = $btnConfig['successCallback'];
+                } elseif ($btnConfig['closeOnSuccess'] ?? false) {
+                    $successCallback = "$('.control-popup').last().popup('hide');";
+                } else {
+                    $successCallback = null;
+                }
 
-        if ($successCallback) {
-            $params['successCallback'] = $successCallback;
-        } elseif ($popupConfig->closeOnSuccess ?? false) {
-            $params['successCallback'] = "$('.control-popup').last().popup('hide');";
+                return [
+                    'label'           => $btnConfig['label'] ?? 'OK',
+                    'class'           => $btnConfig['class'] ?? 'btn btn-primary',
+                    'onClick'         => $btnConfig['onClick'],
+                    'loadIndicator'   => $btnConfig['loadIndicator'] ?? false,
+                    'confirm'         => $btnConfig['confirm'] ?? null,
+                    'successCallback' => $successCallback,
+                ];
+            })->all();
         } else {
-            $params['successCallback'] = null;
+            if ($popupConfig->successCallback ?? null) {
+                $successCallback = $popupConfig->successCallback;
+            } elseif ($popupConfig->closeOnSuccess ?? false) {
+                $successCallback = "$('.control-popup').last().popup('hide');";
+            } else {
+                $successCallback = null;
+            }
+
+            $params['buttons'] = [
+                [
+                    'label'           => $popupConfig->actionBtnLabel ?? 'OK',
+                    'class'           => $popupConfig->actionBtnClass ?? 'btn btn-primary',
+                    'onClick'         => $popupConfig->actionOnClick,
+                    'loadIndicator'   => $popupConfig->loadIndicator ?? false,
+                    'confirm'         => $popupConfig->confirm ?? null,
+                    'successCallback' => $successCallback,
+                ]
+            ];
         }
 
         if ($this->controller->methodExists('getPopupTitle')) {

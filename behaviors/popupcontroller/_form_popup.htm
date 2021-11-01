@@ -6,18 +6,14 @@ use October\Rain\Support\Facades\Form;
  * @var string|null           $title
  * @var string|null           $content
  * @var string|null           $contentBelow
- * @var string                $actionBtnLabel
- * @var string|null           $actionBtnClass
  * @var string                $closeBtnLabel
  * @var string|null           $closeBtnClass
  * @var string                $popupId
- * @var bool                  $loadIndicator
- * @var string|null           $confirm
  * @var string|null           $successCallback
- * @var string                $actionOnClick
  * @var string                $modalPadding
  * @var bool                  $inset
  * @var \Backend\Widgets\Form $form
+ * @var array                 $buttons
  *
  * @see \GromIT\PopupBuilder\Behaviors\PopupController::renderFormPopup
  */
@@ -40,15 +36,17 @@ use October\Rain\Support\Facades\Form;
     </div>
     <div class="modal-footer">
         <div class="loading-indicator-container">
-            <button data-load-indicator="&nbsp;"
-                    data-request="<?= $actionOnClick ?>"
-                    data-request-validate
-                    <?= $successCallback ? 'data-request-success="' . $successCallback . '"' : '' ?>
-                    <?= $loadIndicator ? 'data-popup-load-indicator="1"' : '' ?>
-                    <?= $confirm ? 'data-request-confirm="' . $confirm . '"' : '' ?>
-                    type="submit" class="<?= $actionBtnClass ?>">
-                <?= $actionBtnLabel ?>
-            </button>
+            <?php foreach ($buttons as $btn): ?>
+                <button data-load-indicator="&nbsp;"
+                        data-request="<?= $btn['onClick'] ?>"
+                        data-request-validate
+                        <?= $btn['successCallback'] ? 'data-request-success="' . $btn['successCallback'] . '"' : '' ?>
+                        <?= $btn['loadIndicator'] ? 'data-popup-load-indicator="1"' : '' ?>
+                        <?= $btn['confirm'] ? 'data-request-confirm="' . $btn['confirm'] . '"' : '' ?>
+                        type="submit" class="<?= $btn['class'] ?>">
+                    <?= $btn['label'] ?>
+                </button>
+            <?php endforeach ?>
             <button type="button" class="<?= $closeBtnClass ?>" data-dismiss="popup">
                 <?= $closeBtnLabel ?>
             </button>
