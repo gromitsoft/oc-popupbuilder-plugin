@@ -53,13 +53,13 @@ Or you can write html by yourself.
 
 ## Popup types
 
-PopupController supports 3 types of popups: **content**, **msg** and **form**.
+PopupController supports 3 types of popups: 
 
-Content Popup is popup with static content.
+- **content** - popup with static content.
 
-Msg popups is popup with message like static flash message.
+- **msg** - popup with message like static flash message.
 
-Form popup is popup with custom form.
+- **form** - popup with custom form.
 
 ## Popup config
 
@@ -72,7 +72,7 @@ Option            | Description | Default value
 **type**          | Popup type. Possible values: ```content```, ```form``` or ```msg```. | &nbsp;
 **openBtnLabel**  | Open popup button label. | &nbsp;
 **openBtnClass**  | Open popup button css class. | btn btn-default
-**closeBtnLabel** | Close popup button label. | &nbsp;
+**closeBtnLabel** | Close popup button label. | Close (from lang file)
 **closeBtnClass** | Close popup button css class. | btn btn-default
 **popupSize**     | Size of popup. Available sizes: ```giant```, ```huge```, ```large```, ```medium```, ```small```, ```tiny```. | medium
 **noPadding**     | Remove padding from popup body. | &nbsp;
@@ -118,10 +118,31 @@ Option                  | Description | Default value
 **confirm**             | Confirm message for form submit button. | null
 **closeOnSuccess**      | Close popup on success. | false
 **successCallback**     | Javascript callback for execute after success. Overrides **closeOnSuccess**. | null
+**buttons**             | Config for multiple buttons. See details below. | &nbsp;
 **form**                | Form config. Must contain fields config. | &nbsp;
 **modelClass**          | Model class for form. | \October\Rain\Database\Model
 
 Config for form popup must contain **actionOnClick** and **form** options.
+
+If your **form** popup config has **buttons** property, ten next properties will be ignored:
+- actionBtnLabel
+- actionBtnClass
+- actionOnClick
+- loadIndicator
+- confirm
+- closeOnSuccess
+- successCallback
+
+Each element in **buttons** has these properties:
+
+Option             | Description
+-------------------|-------------
+**label**          | Same as **actionBtnLabel**
+**class**          | Same as **actionBtnClass**
+**onClick**        | Same as **actionOnClick**
+**loadIndicator**  | Same as **loadIndicator**
+**confirm**        | Same as **confirm**
+**closeOnSuccess** | Same as **closeOnSuccess**
 
 ## Overrides
 
