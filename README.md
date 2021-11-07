@@ -104,23 +104,24 @@ Config for content popup must contain **content** or **contentPartial**.
 
 ### Form
 
-Option                  | Description | Default value
-------------------------|-------------|---------------
-**title**               | Popup title. | &nbsp;
-**content**             | Popup content. Renders above the form. | &nbsp;
-**contentBelow**        | Popup content. Renders below the form. | &nbsp;
-**contentPartial**      | Popup content partial. Renders above the form. Overrides **content** property. | &nbsp;
-**contentPartialBelow** | Popup content partial. Renders below the form. Overrides **contentBelow** property. | &nbsp;
-**actionBtnLabel**      | Label of form submit button. | OK
-**actionBtnClass**      | Css class of  form submit button. | btn btn-primary
-**actionOnClick**       | Action on form submit button. | &nbsp;
-**loadIndicator**       | Show loading popup on performing actionOnClick action? | false
-**confirm**             | Confirm message for form submit button. | null
-**closeOnSuccess**      | Close popup on success. | false
-**successCallback**     | Javascript callback for execute after success. Overrides **closeOnSuccess**. | null
-**buttons**             | Config for multiple buttons. See details below. | &nbsp;
-**form**                | Form config. Must contain fields config. | &nbsp;
-**modelClass**          | Model class for form. | \October\Rain\Database\Model
+Option                   | Description | Default value
+-------------------------|-------------|---------------
+**title**                | Popup title. | &nbsp;
+**content**              | Popup content. Renders above the form. | &nbsp;
+**contentBelow**         | Popup content. Renders below the form. | &nbsp;
+**contentPartial**       | Popup content partial. Renders above the form. Overrides **content** property. | &nbsp;
+**contentPartialBelow**  | Popup content partial. Renders below the form. Overrides **contentBelow** property. | &nbsp;
+**actionBtnLabel**       | Label of form submit button. | OK
+**actionBtnClass**       | Css class of  form submit button. | btn btn-primary
+**actionBtnRequestData** | Additional request data for action button. | 
+**actionOnClick**        | Action on form submit button. | &nbsp;
+**loadIndicator**        | Show loading popup on performing actionOnClick action? | false
+**confirm**              | Confirm message for form submit button. | null
+**closeOnSuccess**       | Close popup on success. | false
+**successCallback**      | Javascript callback for execute after success. Overrides **closeOnSuccess**. | null
+**buttons**              | Config for multiple buttons. See details below. | &nbsp;
+**form**                 | Form config. Must contain fields config. | &nbsp;
+**modelClass**           | Model class for form. | \October\Rain\Database\Model
 
 Config for form popup must contain **actionOnClick** and **form** options.
 
@@ -132,6 +133,7 @@ If your **form** popup config has **buttons** property, ten next properties will
 - confirm
 - closeOnSuccess
 - successCallback
+- requestData
 
 Each element in **buttons** has these properties:
 
@@ -143,6 +145,7 @@ Option             | Description
 **loadIndicator**  | Same as **loadIndicator**
 **confirm**        | Same as **confirm**
 **closeOnSuccess** | Same as **closeOnSuccess**
+**requestData**    | Same as **actionBtnRequestData**
 
 ## Overrides
 

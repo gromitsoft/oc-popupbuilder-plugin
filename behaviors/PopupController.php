@@ -208,22 +208,12 @@ class PopupController extends ControllerBehavior
             $btnClass = 'btn btn-default';
         }
 
-        $dataStrings = array_map(function ($val, $key) {
-            return "$key: '$val'";
-        }, $extraRequestData, array_keys($extraRequestData));
-
-        if (!empty($dataStrings)) {
-            $extraDataAttribute = ', ' . implode(', ', $dataStrings);
-        } else {
-            $extraDataAttribute = '';
-        }
-
         return $this->popupMakePartial('btn', [
             'openBtnClass'    => $btnClass,
             'openBtnLabel'    => $popupConfig->openBtnLabel,
             'popupDefinition' => $definition,
             'popupSize'       => $popupConfig->popupSize ?? 'medium',
-            'extraData'       => $extraDataAttribute,
+            'extraData'       => $this->getExtraDataAttribute($extraRequestData, true),
         ]);
     }
 
@@ -318,7 +308,7 @@ class PopupController extends ControllerBehavior
         $params['form']         = $this->controller->widget->{$this->makePopupFormAlias($definition)};
 
         if (isset($popupConfig->buttons) && is_array($popupConfig->buttons)) {
-            $params['buttons'] = collect($popupConfig->buttons)->map(function ($btnConfig) {
+            $params['buttons'] = collect($popupConfig->buttons)->map(function (array $btnConfig) {
                 if ($btnConfig['successCallback'] ?? null) {
                     $successCallback = $btnConfig['successCallback'];
                 } elseif ($btnConfig['closeOnSuccess'] ?? false) {
@@ -334,6 +324,7 @@ class PopupController extends ControllerBehavior
                     'loadIndicator'   => $btnConfig['loadIndicator'] ?? false,
                     'confirm'         => $btnConfig['confirm'] ?? null,
                     'successCallback' => $successCallback,
+                    'requestData'     => $this->getExtraDataAttribute($btnConfig['requestData'] ?? []),
                 ];
             })->all();
         } else {
@@ -353,6 +344,7 @@ class PopupController extends ControllerBehavior
                     'loadIndicator'   => $popupConfig->loadIndicator ?? false,
                     'confirm'         => $popupConfig->confirm ?? null,
                     'successCallback' => $successCallback,
+                    'requestData'     => $this->getExtraDataAttribute($popupConfig->actionBtnRequestData ?? []),
                 ]
             ];
         }
@@ -483,5 +475,24 @@ class PopupController extends ControllerBehavior
         }
 
         return $popupConfig->content ?? null;
+    }
+
+    protected function getExtraDataAttribute(array $data, bool $prependComma = false): string
+    {
+        if (empty($data)) {
+            return '';
+        }
+
+        $result = collect($data)
+            ->map(function ($val, $key) {
+                return "$key: '$val'";
+            })
+            ->implode(', ');
+
+        if ($prependComma) {
+            $result = ', ' . $result;
+        }
+
+        return $result;
     }
 }

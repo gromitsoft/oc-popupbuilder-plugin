@@ -40,6 +40,7 @@ use October\Rain\Support\Facades\Form;
                 <button data-load-indicator="&nbsp;"
                         data-request="<?= $btn['onClick'] ?>"
                         data-request-validate
+                        <?= $btn['requestData'] ? 'data-request-data="' . $btn['requestData'] . '"' : '' ?>
                         <?= $btn['successCallback'] ? 'data-request-success="' . $btn['successCallback'] . '"' : '' ?>
                         <?= $btn['loadIndicator'] ? 'data-popup-load-indicator="1"' : '' ?>
                         <?= $btn['confirm'] ? 'data-request-confirm="' . $btn['confirm'] . '"' : '' ?>
