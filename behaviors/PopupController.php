@@ -422,6 +422,25 @@ class PopupController extends ControllerBehavior
         ];
     }
 
+    protected function getExtraDataAttribute(array $data, bool $prependComma = false): string
+    {
+        if (empty($data)) {
+            return '';
+        }
+
+        $result = collect($data)
+            ->map(function ($val, $key) {
+                return "$key: '$val'";
+            })
+            ->implode(', ');
+
+        if ($prependComma) {
+            $result = ', ' . $result;
+        }
+
+        return $result;
+    }
+
     //
     // Override
     //
@@ -447,7 +466,7 @@ class PopupController extends ControllerBehavior
     {
         $popupConfig = $this->popupDefinitions[$definition];
 
-        return $popupConfig->title ?? null;
+        return $popupConfig->title ? trans($popupConfig->title) : null;
     }
 
     /**
@@ -467,32 +486,13 @@ class PopupController extends ControllerBehavior
                 return $this->controller->makePartial($popupConfig->contentPartialBelow);
             }
 
-            return $popupConfig->contentBelow ?? null;
+            return $popupConfig->contentBelow ? trans($popupConfig->contentBelow) : null;
         }
 
         if ($popupConfig->contentPartial ?? null) {
             return $this->controller->makePartial($popupConfig->contentPartial);
         }
 
-        return $popupConfig->content ?? null;
-    }
-
-    protected function getExtraDataAttribute(array $data, bool $prependComma = false): string
-    {
-        if (empty($data)) {
-            return '';
-        }
-
-        $result = collect($data)
-            ->map(function ($val, $key) {
-                return "$key: '$val'";
-            })
-            ->implode(', ');
-
-        if ($prependComma) {
-            $result = ', ' . $result;
-        }
-
-        return $result;
+        return $popupConfig->content ? trans($popupConfig->content) : null;
     }
 }
