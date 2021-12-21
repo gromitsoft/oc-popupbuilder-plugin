@@ -6,4 +6,4 @@
 1.0.6: Ability to add extra request data to open popup button
 1.0.7: Ability to define multiple action buttons in form popup
 1.0.8: Ability to add request data to popup form buttons
-1.0.9: Translatable title, content and contentBelow
+1.0.9: Translatable properties for popup config

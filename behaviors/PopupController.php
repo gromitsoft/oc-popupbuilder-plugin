@@ -210,7 +210,7 @@ class PopupController extends ControllerBehavior
 
         return $this->popupMakePartial('btn', [
             'openBtnClass'    => $btnClass,
-            'openBtnLabel'    => $popupConfig->openBtnLabel,
+            'openBtnLabel'    => trans($popupConfig->openBtnLabel),
             'popupDefinition' => $definition,
             'popupSize'       => $popupConfig->popupSize ?? 'medium',
             'extraData'       => $this->getExtraDataAttribute($extraRequestData, true),
@@ -318,11 +318,11 @@ class PopupController extends ControllerBehavior
                 }
 
                 return [
-                    'label'           => $btnConfig['label'] ?? 'OK',
+                    'label'           => isset($btnConfig['label']) ? trans($btnConfig['label']) : 'OK',
                     'class'           => $btnConfig['class'] ?? 'btn btn-primary',
                     'onClick'         => $btnConfig['onClick'],
                     'loadIndicator'   => $btnConfig['loadIndicator'] ?? false,
-                    'confirm'         => $btnConfig['confirm'] ?? null,
+                    'confirm'         => isset($btnConfig['confirm']) ? trans($btnConfig['confirm']) : null,
                     'successCallback' => $successCallback,
                     'requestData'     => $this->getExtraDataAttribute($btnConfig['requestData'] ?? []),
                 ];
@@ -338,11 +338,11 @@ class PopupController extends ControllerBehavior
 
             $params['buttons'] = [
                 [
-                    'label'           => $popupConfig->actionBtnLabel ?? 'OK',
+                    'label'           => isset($popupConfig->actionBtnLabel) ? trans($popupConfig->actionBtnLabel) : 'OK',
                     'class'           => $popupConfig->actionBtnClass ?? 'btn btn-primary',
                     'onClick'         => $popupConfig->actionOnClick,
                     'loadIndicator'   => $popupConfig->loadIndicator ?? false,
-                    'confirm'         => $popupConfig->confirm ?? null,
+                    'confirm'         => isset($popupConfig->confirm) ? trans($popupConfig->confirm) : null,
                     'successCallback' => $successCallback,
                     'requestData'     => $this->getExtraDataAttribute($popupConfig->actionBtnRequestData ?? []),
                 ]
@@ -466,7 +466,7 @@ class PopupController extends ControllerBehavior
     {
         $popupConfig = $this->popupDefinitions[$definition];
 
-        return $popupConfig->title ? trans($popupConfig->title) : null;
+        return isset($popupConfig->title) ? trans($popupConfig->title) : null;
     }
 
     /**
@@ -486,13 +486,13 @@ class PopupController extends ControllerBehavior
                 return $this->controller->makePartial($popupConfig->contentPartialBelow);
             }
 
-            return $popupConfig->contentBelow ? trans($popupConfig->contentBelow) : null;
+            return isset($popupConfig->contentBelow) ? trans($popupConfig->contentBelow) : null;
         }
 
         if ($popupConfig->contentPartial ?? null) {
             return $this->controller->makePartial($popupConfig->contentPartial);
         }
 
-        return $popupConfig->content ? trans($popupConfig->content) : null;
+        return isset($popupConfig->content) ? trans($popupConfig->content) : null;
     }
 }
