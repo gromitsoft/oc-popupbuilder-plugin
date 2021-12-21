@@ -414,7 +414,7 @@ class PopupController extends ControllerBehavior
     private function getMainParams(string $definition, $popupConfig): array
     {
         return [
-            'closeBtnLabel' => $popupConfig->closeBtnLabel ?? Lang::get('gromit.popupbuilder::lang.close'),
+            'closeBtnLabel' => isset($popupConfig->closeBtnLabel) ? trans($popupConfig->closeBtnLabel) : Lang::get('gromit.popupbuilder::lang.close'),
             'closeBtnClass' => $popupConfig->closeBtnClass ?? 'btn btn-default',
             'modalPadding'  => $this->getModalPadding($popupConfig),
             'popupId'       => $popupConfig->popupId ?? $definition,
