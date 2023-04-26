@@ -24,8 +24,8 @@ use October\Rain\Support\Facades\Form;
     <?= Form::open() ?>
     <?php if ($title): ?>
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="popup">×</button>
             <h4 class="modal-title"><?= $title ?></h4>
+            <button type="button" class="close" data-dismiss="popup">×</button>
         </div>
     <?php endif ?>
     <div class="modal-body <?= $modalPadding ?>">
