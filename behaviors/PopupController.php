@@ -58,9 +58,10 @@ class PopupController extends ControllerBehavior
             $this->primaryDefinition = 'popup';
         }
 
-        $this->makePopupsConfigs();
-
-        $this->bindForms();
+        $controller->bindEvent('page.beforeDisplay', function () {
+            $this->makePopupsConfigs();
+            $this->bindForms();
+        });
     }
 
     /**
